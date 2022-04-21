@@ -85,10 +85,6 @@ public class UserRestController {
     public ResponseEntity<Success> logout(HttpServletRequest request) {
         //로그아웃시에 Conttext holder에 있는 사용자 정보 컨텐츠 값을 지줘준다.
         userService.logout(request);
-        //현재 사용하고있는 세션 무효화
-        request.getSession().invalidate();
-        //새로운 새션 발급
-        request.getSession(true);
         return new ResponseEntity<>(new Success(true, "로그아웃 성공"), HttpStatus.OK);
     }
 

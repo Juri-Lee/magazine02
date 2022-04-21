@@ -31,6 +31,7 @@ public class Posts extends Timestamped {
     @JoinColumn(name = "username")
     private Users user;
 
+    //cascade가 연관된 Entity에 작업을 수행해준다.
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @BatchSize(size = 5)
     private List<Likes> likeList = new ArrayList<>();
