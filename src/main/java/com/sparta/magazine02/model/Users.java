@@ -35,9 +35,6 @@ public class Users implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likeList = new ArrayList<>();
 
-
-//    @Builder.Default
-
     public void addPost(Posts post) {
         this.postList.add(post);
         post.setUser(this);

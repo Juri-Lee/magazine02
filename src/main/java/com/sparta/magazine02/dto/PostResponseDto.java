@@ -14,6 +14,7 @@ public class PostResponseDto {
     private String imagePath;
     private String contents;
     private String nickname;
+    private String layout;
     private Long likeCount;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -29,18 +30,7 @@ public class PostResponseDto {
         this.likeCount = (long) posts.getLikeList().size();
         this.createdAt = posts.getCreatedAt();
         this.modifiedAt = posts.getModifiedAt();
+        this.layout = posts.getLayout();
         this.liked = false;
     }
-
-    public PostResponseDto(Posts posts, boolean liked) {
-        this.postId = posts.getPostId();
-        this.imagePath = posts.getImagePath();
-        this.contents = posts.getContents();
-        this.nickname = posts.getUser().getNickname();
-        this.likeCount = (long) posts.getLikeList().size();
-        this.createdAt = posts.getCreatedAt();
-        this.modifiedAt = posts.getModifiedAt();
-        this.liked = liked;
-    }
-
 }

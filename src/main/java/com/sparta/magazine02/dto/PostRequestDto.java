@@ -15,11 +15,14 @@ public class PostRequestDto {
     private String imagePath;
     @NotNull(message = "내용이 존재하지 않습니다.")
     private String contents;
+    @NotNull(message = "layout이 존재하지 않습니다.")
+    private String layout;
 
     public Posts toEntity() {
         return Posts.builder()
                 .imagePath(imagePath)
                 .contents(contents)
+                .layout(layout)
                 .build();
     }
 }

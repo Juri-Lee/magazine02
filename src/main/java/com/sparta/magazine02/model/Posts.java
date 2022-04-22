@@ -21,17 +21,20 @@ public class Posts extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "MEDIUMTEXT", nullable = false)
     private String imagePath;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String contents;
+
+    @Column(nullable = false)
+    private String layout;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "username")
     private Users user;
 
-    //cascade가 연관된 Entity에 작업을 수행해준다.
+    //cascade가 연관된 Entity에 작업을 수행해준다.(자식이 삭제 )
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @BatchSize(size = 5)
     private List<Likes> likeList = new ArrayList<>();
@@ -42,13 +45,15 @@ public class Posts extends Timestamped {
     }
 
     @Builder
-    public Posts(String imagePath, String contents) {
+    public Posts(String imagePath, String contents, String layout) {
         this.imagePath = imagePath;
         this.contents = contents;
+        this.layout = layout;
     }
 
     public void update(PostRequestDto requestDto) {
         this.imagePath = requestDto.getImagePath();
         this.contents = requestDto.getContents();
+        this.layout = requestDto.getLayout();
     }
 }

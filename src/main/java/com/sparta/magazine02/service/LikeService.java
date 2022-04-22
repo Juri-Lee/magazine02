@@ -41,15 +41,6 @@ public class LikeService {
         }
     }
 
-    //포스트에 저장된 좋아요를 포스트 삭제 시에 지워주기 위해서 사용
-    //postid에 해당하는 좋아요를 가져와서 전부 다 삭제 해준다 .
-    @Transactional
-    public void deleteLikeByPostID(Long postId){
-        List<Likes> findLike = likeRepository.findAllLikeByPost_PostId(postId);
-        for (Likes likes : findLike) {
-            likeRepository.deleteById(likes.getLikeId());
-        }
-    }
 
     //like 객체 생성
     @Transactional

@@ -26,7 +26,6 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-    private final LikeRepository likeRepository;
 
     //모든 포스트를 반환한다
     //반환할때는 createdAt으로 내림차순으로 반환
@@ -64,6 +63,7 @@ public class PostService {
         Posts post = Posts.builder()
                 .contents(requestDto.getContents())
                 .imagePath(requestDto.getImagePath())
+                .layout(requestDto.getLayout())
                 .build();
         //포스트를 저장한다
         postRepository.save(post);

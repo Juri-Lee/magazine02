@@ -29,13 +29,12 @@ public class PostRestController {
     //내림차순으로 정렬된 포스트를 반환한다.
     @GetMapping("")
     public List<PostResponseDto> findPostAll(HttpServletRequest request) {
-
         //모든 사용자가 열람할 수 있다.
             return postService.findAll();
     }
 
-
     //postId에 해당하는 것만 반환
+    //post 열람
     @GetMapping("/{postId}")
     public PostResponseDto findPost(@PathVariable Long postId) {
             return postService.findOne(postId);
@@ -63,7 +62,7 @@ public class PostRestController {
         //해당 포스트 아이디 삭제
         postService.delete(postId,users.getUsername());
         //해당 포스트가 삭제될 때 포스트를 누른 좋아요도 삭제 해준다.
-        likeService.deleteLikeByPostID(postId);
+       // likeService.deleteLikeByPostID(postId);
         return new ResponseEntity<>(new Success(true, "게시글이 삭제되었습니다."), HttpStatus.OK);
     }
 
