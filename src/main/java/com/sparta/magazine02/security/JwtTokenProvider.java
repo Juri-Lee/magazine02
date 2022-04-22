@@ -16,10 +16,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class JwtTokenProvider {
     private static final long HOUR = 60 * MINUTE;
     private static final long DAY = 24 * HOUR;
 
-    private final long ACCESS_TOKEN_VALID_TIME = DAY ;   // 1 일
+    private final long ACCESS_TOKEN_VALID_TIME = HOUR ;   // 1 시간
 
     private final UserDetailsService userDetailsService;
     private final UserRepository userRepository;

@@ -44,6 +44,7 @@ public class PostRestController {
     @PostMapping("")
     public ResponseEntity<Success> savePost(@RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal Users users, Errors errors) {
         //brequestbody에 에러가 있으면 에러를 반환
+        System.out.println(users.getAuthorities());
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {
                 throw new RestException(HttpStatus.BAD_REQUEST, error.getDefaultMessage());

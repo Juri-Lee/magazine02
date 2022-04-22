@@ -27,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (jwtTokenProvider.validateToken(accessToken)) {
                 //토큰을 SecurityContextHoder 의 Authentication에 저장
                 this.setAuthentication(accessToken);
+
             }
         }
         chain.doFilter(request, response);
