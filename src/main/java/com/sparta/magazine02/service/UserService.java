@@ -4,20 +4,17 @@ import com.sparta.magazine02.advice.RestException;
 import com.sparta.magazine02.dto.LoginRequestDto;
 import com.sparta.magazine02.dto.RegisterRequestDto;
 import com.sparta.magazine02.dto.TokenResponseDto;
-import com.sparta.magazine02.dto.UserInfoResponseDto;
 import com.sparta.magazine02.model.Users;
 import com.sparta.magazine02.repository.UserRepository;
 import com.sparta.magazine02.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.Collections;
+
 
 @RequiredArgsConstructor
 @Service
@@ -28,13 +25,15 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public void registerUser(RegisterRequestDto requestDto) {
+    public Users registerUser(RegisterRequestDto requestDto) {
 
-        userRepository.save(Users.builder()
+        Users user = userRepository.save(Users.builder()
                 .username(requestDto.getUsername())
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .nickname(requestDto.getNickname())
                 .build());
+
+        return user;
     }
 
     //이미존재하는 유저네임이라면 true, 존재하지 않는 유저네임이라면 false를 반환한다.

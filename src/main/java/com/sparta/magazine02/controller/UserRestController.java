@@ -76,7 +76,7 @@ public class UserRestController {
         TokenResponseDto token = userService.login(requestDto);
         //로그인이 오류없이 처리 되었다면 Autorization 토큰을 헤더에 실어 보내준다.
         response.setHeader("Authorization", token.getAuthorization());
-        System.out.println(token.getAuthorization());
+//        System.out.println(token.getAuthorization());
         return new ResponseEntity<>(new Success(true, "로그인에 성공했습니다."), HttpStatus.OK);
     }
 

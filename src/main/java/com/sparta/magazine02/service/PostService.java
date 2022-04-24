@@ -54,7 +54,7 @@ public class PostService {
 
     // 포스트 등록
     @Transactional
-    public void save(PostRequestDto requestDto, String username) {
+    public Posts save(PostRequestDto requestDto, String username) {
         //포스트를 등록할때는 유저가 있어야 한다.
         Users result = userRepository.findByUsername(username).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 username이 존재하지 않습니다.")
@@ -69,10 +69,12 @@ public class PostService {
         postRepository.save(post);
         //유저가 가지고 있는 포스트리스트에 포스트를 추가한다
         result.addPost(post);
+
+        return post;
     }
 
     @Transactional
-    public void delete(Long postId, String username) {
+    public Posts delete(Long postId, String username) {
         //지우려는 포스트 찾기
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
@@ -83,10 +85,11 @@ public class PostService {
         }
         //같다면 지움
         postRepository.deleteByPostId(postId);
+        return post;
     }
 
     @Transactional
-    public void update(Long postId, PostRequestDto requestDto, String username) {
+    public Posts update(Long postId, PostRequestDto requestDto, String username) {
         Posts post = postRepository.findByPostId(postId).orElseThrow(
                 () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
         );
@@ -95,5 +98,6 @@ public class PostService {
         } else {
             throw new RestException(HttpStatus.BAD_REQUEST, "username이 일치하지 않습니다.");
         }
+        return post;
     }
 }
