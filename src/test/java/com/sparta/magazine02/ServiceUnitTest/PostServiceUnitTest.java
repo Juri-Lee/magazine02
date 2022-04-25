@@ -110,7 +110,7 @@ public class PostServiceUnitTest {
     void test4(){
         //given
         //when
-        List<PostResponseDto> getallPost = postService.findAll();
+        List<PostResponseDto> getallPost = postService.findAll(username);
         //then
         assertNotNull(getallPost);
     }

@@ -1,6 +1,9 @@
 package com.sparta.magazine02.security;
 
+import com.sparta.magazine02.advice.RestException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,22 +25,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 헤더에서 JWT 를 받아옵니다.
         String accessToken = jwtTokenProvider.resolveAccessToken(request);
 
-        // 유효한 토큰인지 확인합니다.
+
+        // 토큰이 발급되어 있는 경우 유효한 토큰인지 확인합니다.
         if (accessToken != null) {
             if (jwtTokenProvider.validateToken(accessToken)) {
                 //토큰을 SecurityContextHoder 의 Authentication에 저장
-                this.setAuthentication(accessToken);
-
+                Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }else{
+                //토큰 유효기간 만료
+                //필터 거치면서 로그인정보를 null로 만들어 로그인 안한상태로 만들기
+                SecurityContextHolder.getContext().setAuthentication(null);
             }
         }
+        //전처리
         chain.doFilter(request, response);
+        //후처리
     }
 
-    // SecurityContext 에 Authentication 객체를 저장합니다.
-    public void setAuthentication(String token) {
-        // 토큰으로부터 유저 정보를 받아옵니다.
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
-        // SecurityContext 에 Authentication 객체를 저장합니다.
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
 }

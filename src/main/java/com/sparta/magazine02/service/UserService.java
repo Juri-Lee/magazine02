@@ -51,10 +51,6 @@ public class UserService {
     //가입되지 않은 회원정보로 로그인 시도 하면 안됨
     Users user = userRepository.findByUsername(requestDto.getUsername())
                 .orElseThrow(() -> new RestException(HttpStatus.BAD_REQUEST, "가입되지 않은 username 입니다."));
-    //SQL varchar는 대소문자를 구분하지 않기때문에 입력한 정보와 받아온정보가 대소문자가 맞는지 확인한다.
-//    if(!requestDto.getUsername().equals(user.getUsername())){
-//            throw new RestException(HttpStatus.NOT_FOUND,"username은 대소문자를 구분합니다.");
-//        }
 
      //회원정보와 작성한 비밀번호가 일치하지 않으면 안됨!
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {

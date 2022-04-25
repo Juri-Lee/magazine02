@@ -5,13 +5,11 @@ import com.sparta.magazine02.dto.PostRequestDto;
 import com.sparta.magazine02.dto.PostResponseDto;
 import com.sparta.magazine02.model.Posts;
 import com.sparta.magazine02.model.Users;
+
 import com.sparta.magazine02.repository.LikeRepository;
 import com.sparta.magazine02.repository.PostRepository;
 import com.sparta.magazine02.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,14 +24,33 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
+    private final LikeRepository likeRepository;
     //모든 포스트를 반환한다
     //반환할때는 createdAt으로 내림차순으로 반환
     @Transactional
-    public List<PostResponseDto> findAll() {
+    public List<PostResponseDto> findAll(String username) {
 
         List<Posts> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         List<PostResponseDto> responseDto = new ArrayList<>();
+
+
+        for (Posts post : posts) {
+            PostResponseDto postResponseDto = new PostResponseDto(post);
+            if(username !=null) {
+                if (likeRepository.findLikeByPost_PostIdAndUser_Username(post.getPostId(), username).isPresent()) {
+                    postResponseDto.setLiked(true);
+                }
+            }
+            responseDto.add(postResponseDto);
+        }
+
+        return responseDto;
+    }
+    @Transactional
+    public List<PostResponseDto> findAll() {
+        List<Posts> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<PostResponseDto> responseDto = new ArrayList<>();
+
         for (Posts post : posts) {
             PostResponseDto postResponseDto = new PostResponseDto(post);
             responseDto.add(postResponseDto);
@@ -41,8 +58,22 @@ public class PostService {
         return responseDto;
     }
 
-
     //해당되는 포스트 아이디를 가진 포스트만 반환한다
+    @Transactional
+    public PostResponseDto findOne(Long postId,String username) {
+        Posts post = postRepository.findByPostId(postId).orElseThrow(
+                () -> new RestException(HttpStatus.NOT_FOUND, "해당 postId가 존재하지 않습니다.")
+        );
+
+        PostResponseDto postResponseDto = new PostResponseDto(post);
+
+        if(username !=null) {
+            if (likeRepository.findLikeByPost_PostIdAndUser_Username(post.getPostId(), username).isPresent()) {
+                postResponseDto.setLiked(true);
+            }
+        }
+        return postResponseDto;
+    }
     @Transactional
     public PostResponseDto findOne(Long postId) {
         Posts post = postRepository.findByPostId(postId).orElseThrow(
@@ -50,7 +81,6 @@ public class PostService {
         );
         return new PostResponseDto(post);
     }
-
 
     // 포스트 등록
     @Transactional

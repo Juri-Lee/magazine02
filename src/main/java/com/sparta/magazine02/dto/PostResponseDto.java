@@ -33,4 +33,8 @@ public class PostResponseDto {
         this.layout = posts.getLayout();
         this.liked = false;
     }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
 }

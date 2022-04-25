@@ -2,10 +2,8 @@ package com.sparta.magazine02.controller;
 
 import com.sparta.magazine02.advice.RestException;
 import com.sparta.magazine02.dto.LikeRequestDto;
-import com.sparta.magazine02.model.Likes;
 import com.sparta.magazine02.model.Success;
 import com.sparta.magazine02.model.Users;
-import com.sparta.magazine02.repository.LikeRepository;
 import com.sparta.magazine02.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

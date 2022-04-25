@@ -25,7 +25,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
     //    private String secretKey = "secret";
-    private String SECRET_KEY = "4dW2Ri6fZjsSjgldfYe8soispI6QoqCnvi8oewMS2rvbeW5Swo";
+    private static String SECRET_KEY = "4dW2Ri6fZjsSjgldfYe8soispI6QoqCnvi8oewMS2rvbeW5Swo";
 
 
     private static final long SEC = 1000L;
@@ -87,7 +87,7 @@ public class JwtTokenProvider {
     }
 
 
-    public boolean validateToken(String jwtToken) {
+    public static boolean validateToken(String jwtToken) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());

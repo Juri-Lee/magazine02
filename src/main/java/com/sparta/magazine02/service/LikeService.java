@@ -71,6 +71,7 @@ public class LikeService {
             findPost.addLike(like);
             findUser.addLike(like);
 
+
         }else{
             throw new RestException(HttpStatus.BAD_REQUEST,"이미 좋아요 되어있습니다");
         }

@@ -51,17 +51,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //CorsConfigurationSours 를 cors정책의 설정파일 등록하는 부분
         http
                 .httpBasic().disable()
-                //CORS
+                //CORS---------------------------------------------------------------------------
                 .cors().configurationSource(corsConfigurationSource())
 //                .headers().frameOptions().disable()
                 .and()
                 .csrf().disable()
-                //JWT
+                //JWT-----------------------------------------------------------------------------
+                // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .formLogin().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                // JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 전에 넣는다
+
                 .authorizeRequests()
                 // home 페이지 login 없이 허용
                 .antMatchers("/").permitAll()

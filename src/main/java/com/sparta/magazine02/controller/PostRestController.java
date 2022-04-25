@@ -5,7 +5,6 @@ import com.sparta.magazine02.dto.PostRequestDto;
 import com.sparta.magazine02.dto.PostResponseDto;
 import com.sparta.magazine02.model.Success;
 import com.sparta.magazine02.model.Users;
-import com.sparta.magazine02.service.LikeService;
 import com.sparta.magazine02.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,27 +23,37 @@ import java.util.List;
 @RestController
 public class PostRestController {
     private final PostService postService;
-    private final LikeService likeService;
+
 
     //내림차순으로 정렬된 포스트를 반환한다.
     @GetMapping("")
-    public List<PostResponseDto> findPostAll(HttpServletRequest request) {
+    public List<PostResponseDto> findPostAll(HttpServletRequest request, @AuthenticationPrincipal Users users) {
         //모든 사용자가 열람할 수 있다.
+        try {
+            String username = users.getUsername();
+           return postService.findAll(username);
+        }catch (NullPointerException e){
             return postService.findAll();
+        }
     }
 
     //postId에 해당하는 것만 반환
     //post 열람
     @GetMapping("/{postId}")
-    public PostResponseDto findPost(@PathVariable Long postId) {
+    public PostResponseDto findPost(@PathVariable Long postId , @AuthenticationPrincipal Users users) {
+        try {
+            String username = users.getUsername();
+            return postService.findOne(postId,username);
+        }catch (NullPointerException e){
             return postService.findOne(postId);
+        }
+
     }
 
 
     @PostMapping("")
     public ResponseEntity<Success> savePost(@RequestBody @Valid PostRequestDto requestDto, @AuthenticationPrincipal Users users, Errors errors) {
-        //brequestbody에 에러가 있으면 에러를 반환
-        System.out.println(users.getAuthorities());
+        //requestbody에 에러가 있으면 에러를 반환
         if (errors.hasErrors()) {
             for (FieldError error : errors.getFieldErrors()) {
                 throw new RestException(HttpStatus.BAD_REQUEST, error.getDefaultMessage());
@@ -58,12 +67,8 @@ public class PostRestController {
 
     @DeleteMapping("/{postId}")
     public ResponseEntity<Success> deletePost(@PathVariable Long postId,@AuthenticationPrincipal Users users) {
-        //현재 사용자와 게시글의 사용자가 다르면 게시글을 삭제 할 수 없다.
-
         //해당 포스트 아이디 삭제
         postService.delete(postId,users.getUsername());
-        //해당 포스트가 삭제될 때 포스트를 누른 좋아요도 삭제 해준다.
-       // likeService.deleteLikeByPostID(postId);
         return new ResponseEntity<>(new Success(true, "게시글이 삭제되었습니다."), HttpStatus.OK);
     }
 
