@@ -30,7 +30,8 @@ public class PostService {
     @Transactional
     public List<PostResponseDto> findAll(String username) {
 
-        List<Posts> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+//        List<Posts> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Posts> posts = postRepository.findAllByLikeCount();
         List<PostResponseDto> responseDto = new ArrayList<>();
 
 
@@ -48,8 +49,10 @@ public class PostService {
     }
     @Transactional
     public List<PostResponseDto> findAll() {
-        List<Posts> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+//        List<Posts> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        List<Posts> posts = postRepository.findAllByLikeCount();
         List<PostResponseDto> responseDto = new ArrayList<>();
+
 
         for (Posts post : posts) {
             PostResponseDto postResponseDto = new PostResponseDto(post);
